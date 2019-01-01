@@ -8,10 +8,10 @@ import java.util.Scanner;
 public class Test {
 
 
-    public static void printLaby(Graph G, int size, String file) {
+    private static void printLaby(Graph G, int size, String file) {
 
         {
-	/* suppose que G est une grille de taille size x size et
+            /* suppose que G est une grille de taille size x size et
            crée un .tex qui contient le labyrinthe correspondant */
 
             try {
@@ -92,6 +92,8 @@ public class Test {
                 writer.println("\\end{document}");
                 writer.close();
             } catch (IOException e) {
+
+                e.printStackTrace();
             }
         }
 
@@ -101,15 +103,30 @@ public class Test {
     public static void main(String[] args) {
 
         int size = 4;
-        Graph G = Krusal.krusalApplied(Graph.example());
-        System.out.println();
+
+        Graph graph = new Graph(size);
         Display d = new Display();
-        d.setImage(G.toImage());
+
+
+        // NOTE: Pour questions 3 et 4
+//        for (int i = 0; i < 1000000; i++) {
+//
+//            graph = Krusal.krusalApplied(Graph.example());
+//        }
+
+        AldousBroder aldousBroder = new AldousBroder(Graph.example());
+
+        graph = aldousBroder.randomMarch();
+
+        d.setImage(graph.toImage());
+
+//        Graph G = Krusal.krusalApplied(Graph.example());
+
+        printLaby(graph, size, "toto.tex");
+
         System.out.println("appuyez sur une touche");
+
         new Scanner(System.in).nextLine();
         d.close();
-        printLaby(G, size, "toto.tex");
-
-
     }
 }

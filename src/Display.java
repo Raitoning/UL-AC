@@ -1,12 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class Display extends JFrame {
+class Display extends JFrame {
 
-    boolean visible;
+    private boolean visible;
     private JLabel jlabel;
 
-    public Display() {
+    Display() {
 
         super("Image"); // Titre de la fenêtre
         setPreferredSize(new Dimension(400, 500));  // largeur, hauteur
@@ -15,11 +15,13 @@ public class Display extends JFrame {
 
         visible = false;
 
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         this.add(jlabel, BorderLayout.CENTER);
         this.pack();
     }
 
-    public void setImage(Image blop) {
+    void setImage(Image blop) {
 
         if (!visible) {
             visible = true;
@@ -33,7 +35,7 @@ public class Display extends JFrame {
     /**
      * La fenêtre n'est plus visible
      */
-    public void close() {
+    void close() {
 
         this.dispose();
     }

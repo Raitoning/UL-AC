@@ -111,16 +111,47 @@ public class Test {
         // NOTE: Pour questions 3 et 4
 //        for (int i = 0; i < 1000000; i++) {
 //
+//            System.out.println("Execution #" + i);
+//
 //            graph = Krusal.krusalApplied(Graph.example());
+//
+//            if((graph.isCyclic()) || (graph.edges().size() != 3)) {
+//
+//                System.out.println("ERROR");
+//                break;
+//            }
 //        }
 
-        AldousBroder aldousBroder = new AldousBroder(Graph.example());
+//        for (int i = 0; i < 1000000; i++) {
+//
+//            System.out.println("Execution #" + i);
+//
+//            AldousBroder aldousBroder = new AldousBroder(Graph.example());
+//            graph = aldousBroder.randomMarch();
+//
+//            if((graph.isCyclic()) || (graph.edges().size() != 3)) {
+//
+//                System.out.println("ERROR");
+//                break;
+//            }
+//        }
 
-        graph = aldousBroder.randomMarch();
+
+        for (int i = 0; i < 1000000; i++) {
+
+            System.out.println("Execution #" + i);
+
+            Wilson wilson = new Wilson(Graph.example());
+            graph = wilson.randomMarch();
+
+            if ((graph.isCyclic()) || (graph.edges().size() != 3)) {
+
+                System.out.println("ERROR");
+                break;
+            }
+        }
 
         d.setImage(graph.toImage());
-
-//        Graph G = Krusal.krusalApplied(Graph.example());
 
         printLaby(graph, size, "toto.tex");
 

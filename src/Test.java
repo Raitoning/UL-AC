@@ -7,6 +7,10 @@ import java.util.Scanner;
 
 public class Test {
 
+    private static final int ALGORITHM_ITERATION = 1000000;
+    private static final int LABYRINTH_SIZE = 20;
+    private static final int LABYRINTH_ITERATION = 1000;
+
 
     private static void printLaby(Graph G, int size, String file) {
 
@@ -109,7 +113,7 @@ public class Test {
 
 
         // NOTE: Pour questions 3 et 4
-//        for (int i = 0; i < 1000000; i++) {
+//        for (int i = 0; i < ALGORITHM_ITERATION; i++) {
 //
 //            System.out.println("Execution #" + i);
 //
@@ -122,7 +126,7 @@ public class Test {
 //            }
 //        }
 
-//        for (int i = 0; i < 1000000; i++) {
+//        for (int i = 0; i < ALGORITHM_ITERATION; i++) {
 //
 //            System.out.println("Execution #" + i);
 //
@@ -137,23 +141,68 @@ public class Test {
 //        }
 
 
-        for (int i = 0; i < 1000000; i++) {
+//        for (int i = 0; i < ALGORITHM_ITERATION; i++) {
+//
+//            System.out.println("Execution #" + i);
+//
+//            Wilson wilson = new Wilson(Graph.example());
+//            graph = wilson.randomMarch();
+//
+//            if ((graph.isCyclic()) || (graph.edges().size() != 3)) {
+//
+//                System.out.println("ERROR");
+//                break;
+//            }
+//        }
 
-            System.out.println("Execution #" + i);
+        Graph labyrinthe = new Graph(0);
 
-            Wilson wilson = new Wilson(Graph.example());
-            graph = wilson.randomMarch();
+//        for (int i = 0; i < LABYRINTH_ITERATION; i++) {
+//
+//            labyrinthe = Graph.Grid(LABYRINTH_SIZE);
+//            graph = Krusal.krusalApplied(Graph.Grid(LABYRINTH_SIZE));
+//
+//            // For some reasons, the display in the LaTeX file is inverted.
+//            // We have to take a full grid graph and remove all edges int the covering tree
+//            // To get the proper display.
+//            for (Edge e: graph.edges()) {
+//
+//                for (Edge ee: labyrinthe.edges()) {
+//
+//                    if((e.from == ee.from && e.to == ee.to) || (e.from == ee.to && e.to == ee.from)) {
+//
+//                        labyrinthe.rmEdge(ee);
+//                    }
+//                }
+//
+//            }
+//        }
 
-            if ((graph.isCyclic()) || (graph.edges().size() != 3)) {
+        for (int i = 0; i < LABYRINTH_ITERATION; i++) {
 
-                System.out.println("ERROR");
-                break;
+            labyrinthe = Graph.Grid(LABYRINTH_SIZE);
+            AldousBroder aldousBroder = new AldousBroder(Graph.Grid(LABYRINTH_SIZE));
+            graph = aldousBroder.randomMarch();
+
+            // For some reasons, the display in the LaTeX file is inverted.
+            // We have to take a full grid graph and remove all edges int the covering tree
+            // To get the proper display.
+            for (Edge e : graph.edges()) {
+
+                for (Edge ee : labyrinthe.edges()) {
+
+                    if ((e.from == ee.from && e.to == ee.to) || (e.from == ee.to && e.to == ee.from)) {
+
+                        labyrinthe.rmEdge(ee);
+                    }
+                }
+
             }
         }
 
-        d.setImage(graph.toImage());
+        d.setImage(labyrinthe.toImage());
 
-        printLaby(graph, size, "toto.tex");
+        printLaby(labyrinthe, size, "toto.tex");
 
         System.out.println("appuyez sur une touche");
 

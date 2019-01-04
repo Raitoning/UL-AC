@@ -4,22 +4,23 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 class Graph {
-    private final int V;
     private ArrayList<Edge>[] adj;
     private int[] coordX;
     private int[] coordY;
-    private int e;
+    private final int V;
+    private int E;
 
     @SuppressWarnings("unchecked")
-    Graph(int N) {
+    public Graph(int N) {
 
         this.V = N;
-        this.e = 0;
+        this.E = 0;
         adj = (ArrayList<Edge>[]) new ArrayList[N];
         for (int v = 0; v < N; v++) {
-            adj[v] = new ArrayList<>();
+            adj[v] = new ArrayList<Edge>();
         }
         coordX = new int[N];
         coordY = new int[N];
@@ -69,24 +70,24 @@ class Graph {
         return g;
     }
 
-    int vertices() {
+    public int vertices() {
 
         return V;
     }
 
-    private void setCoordinate(int i, int x, int y) {
+    public void setCoordinate(int i, int x, int y) {
 
         coordX[i] = x;
         coordY[i] = y;
     }
 
-    void copyCoordinates(Graph g) {
+    public void copyCoordinates(Graph g) {
 
         this.coordX = g.coordX;
         this.coordY = g.coordY;
     }
 
-    void addEdge(Edge e) {
+    public void addEdge(Edge e) {
 
         int v = e.from;
         int w = e.to;
@@ -94,7 +95,7 @@ class Graph {
         adj[w].add(e);
     }
 
-    void rmEdge(Edge e) {
+    public void rmEdge(Edge e) {
 
         int v = e.from;
         int w = e.to;
@@ -102,14 +103,14 @@ class Graph {
         adj[w].remove(e);
     }
 
-    private ArrayList<Edge> adj(int v) {
+    public ArrayList<Edge> adj(int v) {
 
-        return new ArrayList<>(adj[v]);
+        return new ArrayList<Edge>(adj[v]);
     }
 
-    ArrayList<Edge> edges() {
+    public ArrayList<Edge> edges() {
 
-        ArrayList<Edge> list = new ArrayList<>();
+        ArrayList<Edge> list = new ArrayList<Edge>();
         for (int v = 0; v < V; v++) {
             for (Edge e : adj(v)) {
                 if (e.from == v) {
@@ -120,7 +121,7 @@ class Graph {
         return list;
     }
 
-    BufferedImage toImage() {
+    public BufferedImage toImage() {
 
         BufferedImage image = new BufferedImage(400, 400, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = image.createGraphics();
@@ -165,13 +166,10 @@ class Graph {
             writer.println("}");
             writer.close();
         } catch (IOException e) {
-
-            e.printStackTrace();
         }
     }
 
     boolean isCyclic() {
-
         boolean visited[] = new boolean[vertices()];
         Arrays.fill(visited, false);
 
@@ -194,8 +192,9 @@ class Graph {
         Edge e;
 
         // Recur for all the vertices adjacent to this vertex
-        for (Edge edge : adj[v]) {
-            e = edge;
+        Iterator<Edge> it = adj[v].iterator();
+        while (it.hasNext()) {
+            e = it.next();
 
             // If an adjacent is not visited, then recur for that
             // adjacent
@@ -208,16 +207,14 @@ class Graph {
             }
 
             if (!visited[i]) {
-                if (isCyclicRecur(i, visited, v)) {
+                if (isCyclicRecur(i, visited, v))
                     return true;
-                }
             }
 
             // If an adjacent is visited and not parent of current
             // vertex, then there is a cycle.
-            else if (i != parent) {
+            else if (i != parent)
                 return true;
-            }
         }
         return false;
 

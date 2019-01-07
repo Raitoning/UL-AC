@@ -2,6 +2,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+
+/**
+ * @author PELTE Gaëtan
+ */
 public class Wilson {
 
     private Graph graph;
@@ -44,11 +48,10 @@ public class Wilson {
         }
 
         history.add(vertex);
-//        visited[target] = true;
 
         while (run) {
 
-            // Getting all the neighbors.
+            // Prendre tout les voisins.
             for (Edge e : sourceEdges) {
 
                 if (e.from == vertex || e.to == vertex) {
@@ -57,10 +60,10 @@ public class Wilson {
                 }
             }
 
-            // Choosing the next edge randomly.
+            // Choisir une arête au hazard.
             Edge randomEdge = availableEdges.get(random.nextInt(availableEdges.size()));
 
-            // Going onto the neighbor.
+            // Se déplacer sur le voisin.
             if (vertex == randomEdge.from) {
 
                 vertex = randomEdge.to;
@@ -69,53 +72,53 @@ public class Wilson {
                 vertex = randomEdge.from;
             }
 
-            // Adding the current vertex to the history.
+            // Ajouter le noeud courant à l'historique.
             history.add(vertex);
 
-            // Cleaning all the potential neighbors.
+            // Nettoyer les voisins disponibles
             availableEdges.clear();
 
-            // If we reached the target vertex.
+            // Si on as atteint un noeud marqué visité.
             if (visited[vertex]) {
 
                 run = false;
 
                 Arrays.fill(numberOfVisits, 0);
 
-                // Check if all vertices have been visited only once.
+                // Si tous les noeuds ont été visité qu'une seule fois
                 for (int i = 0; i < history.size(); i++) {
 
-                    // If a vertex hasn't been visited yet, mark it visited.
+                    // Si un noeud n'as pas été compté visité.
                     if (numberOfVisits[history.get(i)] == 0) {
 
                         numberOfVisits[history.get(i)]++;
                     } else {
 
-                        // A vertex has been visited twice, there is a loop.
+                        // Si le noeud à déjà été compté visité, il y à une boucle.
                         loopingVertex = history.get(i);
 
-                        // Remove the first loop detected
+                        // Enlever la première boucle détectée.
                         removeLoops(history, loopingVertex);
 
-                        // Select a new random vertex that hasn't been visited yet.
+                        // Choisir un noeud qui n'as pas déjà été visité.
                         while (visited[vertex]) {
 
                             vertex = random.nextInt(graph.vertices());
                         }
 
-                        // Restart the loop checking.
+                        // Redémarrer la vérification de boucles.
                         i = -1;
                         Arrays.fill(numberOfVisits, 0);
                     }
                 }
 
-                // Mark all visited verticex visited.
+                // Marquer tous les noeuds de l'historique visités.
                 for (Integer j : history) {
 
                     visited[j] = true;
                 }
 
-                // Add all the visited edges.
+                // Ajouter toutes les arrêtes visitées.
                 for (int j = 0; j < history.size() - 1; j++) {
 
                     for (Edge e : sourceEdges) {
@@ -130,14 +133,15 @@ public class Wilson {
                     }
                 }
 
-                // Clear the history of visited vertices.
+                // Nettoyer les voisins disponibles
                 history.clear();
 
-                // Checking if all vertices have been visited.
+                // Regarder si tous les noeuds on étés visités.
                 for (boolean b : visited) {
 
                     run = false;
 
+                    // Si non, on relance l'algorithme.
                     if (!b) {
 
                         run = true;
@@ -152,13 +156,13 @@ public class Wilson {
 
     private void removeLoops(ArrayList<Integer> history, int loopingVertex) {
 
-        // Getting the index of the first occurence of the looping vertex.
+        // Obtenir l'index de la première occurence du noeud générant la boucle
         int firstOccurence = history.indexOf(loopingVertex);
 
-        // Getting the index of the last occurence of the looping vertex.
+        // Obtenir l'index de la dernière occurence du noeud générant la boucle
         int lastOccurence = history.lastIndexOf(loopingVertex);
 
-        // Removing all vertices between the first and the last occurence of the looping vertex.
+        // Supprimer tous les noeuds entre la première et la dernière occurence du noeud générant la boucle.
         for (int toRemove = lastOccurence - 1 - firstOccurence; toRemove > -1; toRemove--) {
 
             history.remove(firstOccurence);

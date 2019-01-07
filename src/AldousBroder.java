@@ -2,6 +2,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * @author PELTE Gaëtan
+ */
 public class AldousBroder {
 
     private Graph graph;
@@ -33,7 +36,7 @@ public class AldousBroder {
 
         while (run) {
 
-            // Getting all the neighbors.
+            // Prendre tout les voisins.
             for (Edge e : sourceEdges) {
 
                 if (e.from == vertex || e.to == vertex) {
@@ -42,18 +45,18 @@ public class AldousBroder {
                 }
             }
 
-            // Choosing the next edge randomly.
+            // Choisir une arête au hazard.
             Edge randomEdge = availableEdges.get(random.nextInt(availableEdges.size()));
 
-            // Adding the selected edge to the new graph
-            // and marking it visited on the source graph.
+            // L'ajouter au nouveau graphe
+            // Et la marquer visitée sur le graphe d'origine.
             for (Edge e : sourceEdges) {
 
                 if (e.from == randomEdge.from && e.to == randomEdge.to) {
 
                     outputGraph.addEdge(e);
 
-                    // Checking if the output graph if now cyclic or not.
+                    // Regarder si le nouveau graphe est cyclique ou non.
                     if (outputGraph.isCyclic()) {
 
                         outputGraph.rmEdge(e);
@@ -64,7 +67,7 @@ public class AldousBroder {
 
             visited[vertex] = true;
 
-            // Going onto the neighbor.
+            // Se déplacer sur le voisin.
             if (vertex == randomEdge.from) {
 
                 vertex = randomEdge.to;
@@ -73,20 +76,20 @@ public class AldousBroder {
                 vertex = randomEdge.from;
             }
 
-            // Cleaning all the potential neighbors.
+            // Nettoyer les voisins disponibles
             availableEdges.clear();
 
-            // Checking if all vetices have been visited.
+            // Regarder si tous les noeuds on étés visités.
             for (boolean b : visited) {
 
-                // If not, continue to run the algorithm.
+                // Si non, on relance l'algorithme.
                 if (!b) {
 
                     run = true;
                     break;
                 } else {
 
-                    // Else, stop the algorithm.
+                    // Si oui, on arrête l'algorithme.
                     run = false;
                 }
             }

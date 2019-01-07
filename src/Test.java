@@ -2,9 +2,13 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
 
+/**
+ * Décommenter les fonctions à exécuter/tester.
+ */
 public class Test {
 
     private static final int ALGORITHM_ITERATION = 1000000;
@@ -107,28 +111,41 @@ public class Test {
     public static void main(String[] args) {
 
         int size = 4;
-
-        Graph graph = new Graph(size);
+        Graph graph = new Graph(0);
         Display d = new Display();
 
+        HashMap<Graph, Integer> repartition = new HashMap<>();
 
-        // NOTE: Pour questions 3 et 4
+        // Arbres couvrants
+        // NOTE: La répartion contient 36 graphes couvrants et non 8.
+        // Il doit s'agir de plusieurs les mêmes graphes mais avec l'ordre et/ou le sens des arêtes différents.
+
+        // Algorithme de Kruskal
 //        for (int i = 0; i < ALGORITHM_ITERATION; i++) {
 //
-//            System.out.println("Execution #" + i);
+//            // System.out.println("Execution #" + i);
 //
-//            graph = Krusal.krusalApplied(Graph.example());
+//            graph = Kruskal.kruskalApplied(Graph.example());
 //
-//            if((graph.isCyclic()) || (graph.edges().size() != 3)) {
+//            if ((graph.isCyclic()) || (graph.edges().size() != 3)) {
 //
 //                System.out.println("ERROR");
 //                break;
 //            }
+//
+//            if(repartition.containsKey(graph)) {
+//
+//                repartition.replace(graph, repartition.get(graph) + 1);
+//            } else {
+//
+//                repartition.put(graph, 0);
+//            }
 //        }
 
+        // Algorithme d'Aldous-Broder
 //        for (int i = 0; i < ALGORITHM_ITERATION; i++) {
 //
-//            System.out.println("Execution #" + i);
+//            // System.out.println("Execution #" + i);
 //
 //            AldousBroder aldousBroder = new AldousBroder(Graph.example());
 //            graph = aldousBroder.randomMarch();
@@ -138,33 +155,53 @@ public class Test {
 //                System.out.println("ERROR");
 //                break;
 //            }
-//        }
-
-
-//        for (int i = 0; i < ALGORITHM_ITERATION; i++) {
 //
-//            System.out.println("Execution #" + i);
+//            if(repartition.containsKey(graph)) {
 //
-//            Wilson wilson = new Wilson(Graph.example());
-//            graph = wilson.randomMarch();
+//                repartition.replace(graph, repartition.get(graph) + 1);
+//            } else {
 //
-//            if ((graph.isCyclic()) || (graph.edges().size() != 3)) {
-//
-//                System.out.println("ERROR");
-//                break;
+//                repartition.put(graph, 0);
 //            }
 //        }
 
+
+        // Algorithme de Wilson
+        for (int i = 0; i < ALGORITHM_ITERATION; i++) {
+
+            // System.out.println("Execution #" + i);
+
+            Wilson wilson = new Wilson(Graph.example());
+            graph = wilson.randomMarch();
+
+            if ((graph.isCyclic()) || (graph.edges().size() != 3)) {
+
+                System.out.println("ERROR");
+                break;
+            }
+
+            if (repartition.containsKey(graph)) {
+
+                repartition.replace(graph, repartition.get(graph) + 1);
+            } else {
+
+                repartition.put(graph, 0);
+            }
+        }
+
+        // Génération de labyrinthe
+
         Graph labyrinthe = new Graph(0);
 
+        // Algorithme de Kruskal
 //        for (int i = 0; i < LABYRINTH_ITERATION; i++) {
 //
 //            labyrinthe = Graph.Grid(LABYRINTH_SIZE);
-//            graph = Krusal.krusalApplied(Graph.Grid(LABYRINTH_SIZE));
+//            graph = Kruskal.kruskalApplied(Graph.Grid(LABYRINTH_SIZE));
 //
-//            // For some reasons, the display in the LaTeX file is inverted.
-//            // We have to take a full grid graph and remove all edges int the covering tree
-//            // To get the proper display.
+//            // Pour certaines raisons, l'affichage dans le fichier LaTeX est inversé.
+//            // Il faut prendre un nouveau graphe grille et retirer les arêtes de l'arbre couvrant
+//            // Pour avoir un affichage correct.
 //            for (Edge e: graph.edges()) {
 //
 //                for (Edge ee: labyrinthe.edges()) {
@@ -178,31 +215,52 @@ public class Test {
 //            }
 //        }
 
-        for (int i = 0; i < LABYRINTH_ITERATION; i++) {
+        // Algorithme d'Aldous Broder
+//        for (int i = 0; i < LABYRINTH_ITERATION; i++) {
+//
+//            labyrinthe = Graph.Grid(LABYRINTH_SIZE);
+//            AldousBroder aldousBroder = new AldousBroder(Graph.Grid(LABYRINTH_SIZE));
+//            graph = aldousBroder.randomMarch();
+//
+//            // Pour certaines raisons, l'affichage dans le fichier LaTeX est inversé.
+//            // Il faut prendre un nouveau graphe grille et retirer les arêtes de l'arbre couvrant
+//            // Pour avoir un affichage correct.
+//            for (Edge e : graph.edges()) {
+//
+//                for (Edge ee : labyrinthe.edges()) {
+//
+//                    if ((e.from == ee.from && e.to == ee.to) || (e.from == ee.to && e.to == ee.from)) {
+//
+//                        labyrinthe.rmEdge(ee);
+//                    }
+//                }
+//
+//            }
+//        }
 
-            labyrinthe = Graph.Grid(LABYRINTH_SIZE);
-            AldousBroder aldousBroder = new AldousBroder(Graph.Grid(LABYRINTH_SIZE));
-            graph = aldousBroder.randomMarch();
 
-            // For some reasons, the display in the LaTeX file is inverted.
-            // We have to take a full grid graph and remove all edges int the covering tree
-            // To get the proper display.
-            for (Edge e : graph.edges()) {
+        // Vérifier si toutes les probabilités d'apparition sont bien +- égales à 100 (imprécision conversion int/float)
+        // Permet aussi d'affier les probabilités d'apparition.
 
-                for (Edge ee : labyrinthe.edges()) {
+        System.out.println("Nombre d'arbres couvrants: " + repartition.size());
 
-                    if ((e.from == ee.from && e.to == ee.to) || (e.from == ee.to && e.to == ee.from)) {
+        for (Graph g : repartition.keySet()) {
 
-                        labyrinthe.rmEdge(ee);
-                    }
-                }
-
-            }
+            System.out.println(((float) repartition.get(g) / ALGORITHM_ITERATION) * 100 + "%");
         }
 
-        d.setImage(labyrinthe.toImage());
+        // Afficher un graphe
+//        d.setImage(graph.toImage());
 
-        printLaby(labyrinthe, size, "toto.tex");
+        // Afficher un labyrinthe
+//        d.setImage(labyrinthe.toImage());
+
+        // Enregister un graphe
+//        printLaby(graph, size, "toto.tex");
+
+
+        // Enregistrer un labyrinthe
+//        printLaby(graph, size, "toto.tex");
 
         System.out.println("appuyez sur une touche");
 

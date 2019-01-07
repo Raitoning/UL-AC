@@ -15,6 +15,7 @@ class Display extends JFrame {
 
         visible = false;
 
+        // Quitter le programme en fermant la fenêtre.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.add(jlabel, BorderLayout.CENTER);

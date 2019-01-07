@@ -1,9 +1,12 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Krusal {
+/**
+ * @author VIRTE Bryan
+ */
+public class Kruskal {
 
-    static Graph krusalApplied(Graph graph) {
+    static Graph kruskalApplied(Graph graph) {
 
 //        return addWithoutCycle(shuffled(graph), graph);
 
@@ -38,7 +41,6 @@ public class Krusal {
 
         Graph g = new Graph(source.vertices());
         g.copyCoordinates(source);
-
 
         for (Edge e : edges) {
 
